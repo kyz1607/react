@@ -1,13 +1,68 @@
-import React from 'react';
-import styles from './App.module.scss';
-import './App.scss'
+import React from "react";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    useRouteMatch
+} from "react-router-dom";
 
-function App() {
-  return (
-  <div className={`error ${styles.box}`}>456
-      <button className={styles.error}>Error Button</button>
-  </div>
-);
+// This example show how you could create a custom
+// <Link> that renders something special when the URL
+// is the same as the one the <Link> points to.
+
+export default function CustomLinkExample() {
+    return (
+        <Router>
+            <div>
+                <OldSchoolMenuLink
+                    activeOnlyWhenExact={true}
+                    to="/"
+                    label="Home"
+                />
+                <OldSchoolMenuLink to="/about" label="About" />
+
+                <hr />
+
+                <Switch>
+                    <Route exact path="/">
+                        <Home />
+                    </Route>
+                    <Route path="/about">
+                        <About />
+                    </Route>
+                </Switch>
+            </div>
+        </Router>
+    );
 }
 
-export default App;
+function OldSchoolMenuLink({ label, to, activeOnlyWhenExact }) {
+    let match = useRouteMatch({
+        path: to,
+        exact: activeOnlyWhenExact
+    });
+
+    return (
+        <div className={match ? "active" : ""}>
+            {match && "> "}
+            <Link to={to}>{label}</Link>
+        </div>
+    );
+}
+
+function Home() {
+    return (
+        <div>
+            <h2>Home</h2>
+        </div>
+    );
+}
+
+function About() {
+    return (
+        <div>
+            <h2>About</h2>
+        </div>
+    );
+}
